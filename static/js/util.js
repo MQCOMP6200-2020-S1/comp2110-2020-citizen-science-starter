@@ -1,4 +1,6 @@
-export {split_hash};
+export { split_hash };
+export { sortArrayDescending };
+
 
 // split_hash - given a hash path like "#!/observations/2" 
 //   return an object with properties `path` ("observations") and `id` (2)
@@ -15,3 +17,11 @@ function split_hash(hash) {
         return { path: "" }
     }
 }
+
+// copied code (read 'took inspiration') from the following article
+// https://flaviocopes.com/how-to-sort-array-by-date-javascript/
+function sortArrayDescending(array) {
+    return array.sort((a, b) => {
+        return (new Date(b.timestamp) - new Date(a.timestamp))
+    })
+} 
