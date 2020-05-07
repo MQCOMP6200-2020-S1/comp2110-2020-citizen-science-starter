@@ -35,21 +35,7 @@ const Model = {
       //     "bark_colour": string,
       //     "bark_texture": string
       // }
-      // {
-      //     "id": 0,
-      //     "participant": 6,
-      //     "timestamp": "2020-04-05T01:11:52.659941",
-      //     "temperature": 13,
-      //     "weather": "sunny",
-      //     "wind": "strong",
-      //     "location": "Marsfield",
-      //     "height": 24,
-      //     "girth": 2.85,
-      //     "leaf_size": "large",
-      //     "leaf_shape": "divided",
-      //     "bark_colour": "red",
-      //     "bark_texture": "crinkles"
-      // }
+      
     ],
     users: [
       // {
