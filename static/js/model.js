@@ -1,10 +1,10 @@
 // Exports
-export { Model };
+export {Model};
 
 // Imports
-import { sortArrayDescending, makeGetRequest, makePostRequest } from './util.js';
+import {sortArrayDescending, makeGetRequest, makePostRequest} from './util.js';
 
-import { constants } from './constants.js';
+import {constants} from './constants.js';
 
 /* 
  * Model class to support the Citizen Science application
@@ -56,18 +56,20 @@ const Model = {
   // with the model as the event detail
   // @param userId: string (optional)
   // @returns Promise with response data
-  update_users: function (userId = '') {
+  update_users: async function (userId = '') {
     // Ideally I would have renamed this function to fetchUsers.
     //  The requirements state to keep the file structure.
     const requestUrl = userId ? `${this.users_url}/${userId}` : this.users_url;
-    makeGetRequest(requestUrl).then((result) => {
-      this.data.users = result;
-      const modelUpdatedEvent = new CustomEvent(constants.events.modelUpdated, { detail: this });
+    try {
+      const data = await makeGetRequest(requestUrl);
+      this.data.users = data;
+      const modelUpdatedEvent = new CustomEvent(constants.events.modelUpdated, {detail: this});
       window.dispatchEvent(modelUpdatedEvent);
-    }).catch((err) => {
+      return data;
+    } catch (err) {
       console.error('An error occurred fetching:', requestUrl);
       console.error(err);
-    });
+    }
   },
 
   // update_observations - retrieve the latest list of observations
@@ -76,32 +78,41 @@ const Model = {
   // with the model as the event detail
   // @param observationId: string (optional)
   // @returns Promise with response data
-  update_observations: function (observationId = '') {
+  update_observations: async function (observationId = '') {
+
     // Ideally I would have renamed this function to fetchObservations.
     //  The requirements state to keep the file structure.
     const requestUrl = observationId ? `${this.observations_url}/${observationId}` : this.observations_url;
-    makeGetRequest(requestUrl).then((result) => {
-      this.data.observations = result;
-      const modelUpdatedEvent = new CustomEvent(constants.events.modelUpdated, { detail: this });
+    try {
+      const data = await makeGetRequest(requestUrl);
+      this.data.observations = data;
+      const modelUpdatedEvent = new CustomEvent(constants.events.modelUpdated, {detail: this});
       window.dispatchEvent(modelUpdatedEvent);
-    }).catch((err) => {
+      return data;
+    } catch (err) {
       console.error('An error occurred fetching:', requestUrl);
       console.error(err);
-    });
+    }
   },
 
   // get_observations - return an array of observation objects
   get_observations: function () {
-    return this.data.observations;
+    return JSON.parse(JSON.stringify(this.data.observations));
   },
 
   // get_observation - return a single observation given its id
   get_observation: function (observationid) {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
-    this.data.observations.find(observation => observation.id === observationid);
+
+    return this.get_observations().find(observation => observation.id === observationid) || null;
   },
 
   set_observations: function (observations) {
+    observations = observations.map(obs => {
+     let tempObj = obs;
+      tempObj.participant = parseInt(obs.participant, 10);
+      return tempObj;
+    });
     this.data.observations = observations;
   },
 
@@ -110,29 +121,29 @@ const Model = {
   //   formdata is a FormData object containing all fields in the observation object
   // when the request is resolved, creates an "observationAdded" event
   //  with the response from the server as the detail
-  add_observation: function (formdata) {
+  add_observation: async function (formdata) {
     const body = formdata;
     makePostRequest(this.observations_url, body)
       .then((result) => {
-        if(result.status === 'success') {
-          const observationAddedEvent = new CustomEvent(constants.events.observationAdded, { detail: result });
+        if (result.status === 'success') {
+          const observationAddedEvent = new CustomEvent(constants.events.observationAdded, {detail: result});
           window.dispatchEvent(observationAddedEvent);
-          this.set_observations([...this.data.observations, JSON.parse(result["obersvation"])])
+          this.set_observations([...this.get_observations(), result['observation']])
         } else {
-          const observationAddedEvent = new CustomEvent(constants.events.observationAdded, { detail: result });
+          const observationAddedEvent = new CustomEvent(constants.events.observationAdded, {detail: result});
           window.dispatchEvent(observationAddedEvent);
         }
       }).catch((err) => {
-        console.error('Error creating new observation', err);
-      });
-
+      console.error('Error creating new observation', err);
+    });
   },
 
   // get_user_observations - return just the observations for
   //   one user as an array
-  get_user_observations: function (userid) {
+  get_user_observations: function (userId) {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
-    return sortArrayDescending(this.data.observations.filter(observation => observation.participant === userid))
+    userId = parseInt(userId, 10);
+    return sortArrayDescending(this.get_observations().filter(observation => parseInt(observation.participant, 10) === userId), 'timestamp')
   },
 
   // get_recent_observations - return the N most recent
@@ -140,8 +151,8 @@ const Model = {
   // @param N: number, number of returned entries.
   // @returns array of objects
   get_recent_observations: function (N) {
-    return sortArrayDescending((this.data.observations)
-      .slice(0, N)); // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
+    return sortArrayDescending((this.get_observations()), 'timestamp'
+    ).slice(0, N); // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
   },
 
   /*
@@ -149,7 +160,7 @@ const Model = {
   */
   // get_users - return the array of users
   get_users: function () {
-    return this.data.users;
+    return JSON.parse(JSON.stringify(this.data.users));
   },
 
   // set_users - set the array of users
@@ -161,6 +172,23 @@ const Model = {
   //    the user id
   get_user: function (userid) {
     return this.data.users.find(user => user.id === userid) || null;
+  },
+
+// Funtion returns top N users with maximum number of observations
+//  @Param N: number
+//  @returns user array
+  get_top_users: function (N) {
+    let users = JSON.parse(JSON.stringify(this.data.users));
+    users = sortArrayDescending(users.map(user => {
+      return {
+        id: user.id,
+        'last_name': user['last_name'],
+        firstName: user['first_name'],
+        avatar: user.avatar,
+        observations: this.get_observations().filter(observation => +observation.participant === user.id).length
+      }
+    }), 'observations').slice(0, N)
+    return users;
   }
 
 };

@@ -1,11 +1,34 @@
 /* sample spreadshet - you should replace all of this! */
+.main-container {
+    background: url(../images/primary-bg.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.second-container {
+    background: url(../images/secondary-bg.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
 body {
+    height: 100vh;
+    width: 100%;
+    font-family: 'Karla', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     margin: 100px;
+    font-size: 14px !important;
+
+}
+body > * {
+    margin: 0;
+    padding: 0;
 }
 
 header {
-    width: 100%;
-    background-color: coral;
+
 }
 
 #heading {
@@ -20,4 +43,215 @@ header {
 
 footer {
     background-color: yellow;
+}
+.h-90 {
+    height: 90% !important;
+}
+.h-80 {
+    height: 80% !important;
+}
+.h-15 {
+    height: 15% !important;
+}
+.h-10 {
+    height: 10% !important;
+}
+
+.navigation-bar {
+    top: 0;
+    left: 0;
+    background-color: rgba(256, 256, 256, 0.1);   
+}
+
+.nav-links {
+    font-size: 1.2rem !important;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.nav-links > a {
+    cursor: pointer;
+    border-bottom: 0.11rem solid transparent;
+    transition: all linear 0.6s;
+}
+
+.nav-links > a:hover {
+    border-bottom: 0.11rem solid #EDFED1;
+    font-weight: bold;
+    color: #EDFED1 !important;
+}
+.color-primary {
+    color: #EDFED1;
+}
+.color-secondary {
+    color: #bee3db;
+}
+
+.heading-container > img {
+    height: 3rem;
+    width: 3rem;
+    fill: #C5C6C7;
+}
+
+
+/* Heading Section starts*/
+h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.1rem !important;
+}
+
+h2 {
+    font-family: 'Karla', sans-serif;
+    font-size: 1.7rem !important;
+}
+/* Heading section ends */
+
+p {
+    font-family: 'Karla', sans-serif;
+    font-size: 1.3 !important;
+    margin-bottom: 0 !important;
+}
+
+a {
+    text-decoration: none !important;
+    color: inherit;
+    cursor: auto;
+}
+
+/* Fixed header */
+
+.table-fixed {
+    max-height: 100%;
+    height: 100%;
+}
+.table-fixed tbody {
+    height: calc(100% - 2.5rem);
+    overflow-y: auto;
+    width: 100%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th {
+    display: block;
+    font-size: 0.7rem !important;
+}
+
+.table-fixed tbody td,
+.table-fixed tbody th,
+.table-fixed thead > tr > th {
+    float: left;
+    position: relative;
+
+    &::after {
+        content: '';
+        clear: both;
+        display: block;
+    }
+}
+
+.w-10 {
+    width: 10% !important;
+}
+.w-15 {
+    width: 15% !important;
+}
+.w-20 {
+    width: 20% !important;
+}
+.w-45 {
+    width: 45% !important;
+}
+
+.h-35 {
+    height: 35% !important;
+}
+
+.h-40 {
+    height: 40% !important;
+}
+
+.h-20 {
+    height: 20% !important;
+}
+
+
+.table-background {
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+#page-container {
+    max-height: 100% !important;
+    overflow-y: scroll;
+}
+
+.widget-container {
+    height: 20rem;
+}
+
+.overflow-y-scroll {
+    overflow-y: scroll;
+    max-height: 100%;
+}
+
+.observation-container:nth-child(even) {
+    background: #CCC
+}
+
+.observation-container:nth-child(odd) {
+    background: #FFF
+}
+
+
+.podium-count {
+    height: 3rem !important;
+    width: 3rem !important;
+    border-radius: 50%;
+    background-color: #EDFED1;
+    font-size: 1.7rem;
+}
+.podium-count div {
+    color: #CFCFCF;
+    font-size: 1.7rem;
+}
+.podium-element img {
+    height: 3rem !important;
+    width: 3rem !important;
+    border-radius: 50%;
+}
+
+.podium-element span, a {
+   font-size: 0.7rem !important;
+}
+
+.podium {
+    background-color: rgba(255, 255, 255, 0.75);
+}
+
+
+.user-details {
+    margin-top: 2.5%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.h-65 {
+    height: 65% !important;
+}
+
+.user-details img {
+    height: 100%;
+    border-radius: 50%;
+    background-color: #FCFCFC;
+}
+
+.dark-background {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.color-white {
+    color: #FCFCFC;
+}
+
+#observation-details span{
+    font-size: 0.7rem;
 }

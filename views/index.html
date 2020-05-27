@@ -1,64 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Citizen Science</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
 
-    <!-- Include Handlebars from a CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
-    <script src="/static/js/main.js" type=module defer></script>
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <title>Citizen Science</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/css/style.css" type="text/css">
 
-    <header>
-      <div id="logo"></div>
-      <nav>
-          <ul>
-              <li><a href="#">Home</a></li>
-              <li><a href="#!/users">Users</a></li>
-              <li><a href="#!/observations">Observations</a></li>
-              <li><a href="#!/submit">Submit an observation</a></li>
-          </ul>
-      </nav>
-    </header>
+  <!-- Include Handlebars from a CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 
-    <div id="content">
 
-      <div id="heading">
-          
-          <hgroup>
-              <h1>Citizen Science</h1>
-              <h2>Understanding Our Trees</h2>
-          </hgroup>
-      
-          <div id="target"></div>
+  <!-- Custom JS files -->
+  <script src="/static/js/main.js" type=module defer></script>
+  <script src="/static/js/views.js" type=module defer></script>
 
+  <!-- Adding bootstrap fom a CDN -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+          integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+          integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+          integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+          crossorigin="anonymous"></script>
+
+  <!-- Third party libraries -->
+  <script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+  <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.21/b-1.6.2/b-html5-1.6.2/datatables.min.css"/>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+  <script type="text/javascript"
+          src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.21/b-1.6.2/b-html5-1.6.2/datatables.min.js"></script>
+
+
+  <!-- Adding fonts via google cdn -->
+  <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,700;1,400&family=Montserrat&display=swap"
+        rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="main-container w-100 h-100 d-flex flex-column">
+  <div class="navigation-bar h-10 w-100 d-flex">
+    <div class="d-flex w-50 align-self-center heading-container">
+      <img class="color-seconday ml-4" src="/static/images/tree.svg"/>
+      <h1 class="main-heading color-secondary align-self-center ml-2">
+        A Woody Dilemma
+      </h1>
+    </div>
+    <div class="d-flex justify-content-end w-50 align-self-center nav-links font-weight-bold">
+      <a class="mr-3 color-primary" href="#">Home</a>
+      <a class="mr-3 color-primary" href="#!/users">Users</a>
+      <a class="mr-3 color-primary" href="#!/observations">Observations</a>
+      <a class="mr-5 color-primary" href="#!/submit">Submit an Observation</a>
+    </div>
+  </div>
+
+
+  <div class="w-100 h-90">
+    <div id="page-container" class="w-100 h-100 overflow-y-scroll">
+    </div>
+  </div>
+
+</div>
+
+<!-- Templates -->
+
+</body>
+<script id="home-page-template" type="text/x-handlebars-template">
+  <div id="home-page" class="page active h-100 w-100">
+    <div class="d-flex flex-column h-100">
+      <div class="w-75 mt-2 mx-auto h-40 d-flex flew-row">
+        <div class="h-100 w-50 mx-auto">
+          <h2 class="color-primary">
+            Summary
+          </h2>
+          <p class="color-secondary font-weight-light">
+            Welcome to the Citizen Science Portal!<br>
+            The portal allows its users to record observations regarding the trees in their environment.
+          </p>
+        </div>
+        <div class="h-100 w-50">
+          <h2 class="color-primary">
+            Leader-board
+          </h2>
+          #leader-board
+        </div>
+      </div>
+
+      <div class="w-100 widget-container my-4 h-40">
+        <div class="h-100 w-75 mx-auto">
+          <h2 class="color-primary">
+            Recent Observations
+          </h2>
+          <div class="h-90">
+            #recent-obs
+          </div>
+        </div>
       </div>
     </div>
+  </div>
+</script>
 
-  <footer>
+<!--Observation view used to render recent observations-->
+<script id="recent-observations" type="text/x-handlebars-template">
+  <div id="recent-observations-container" class="page mx-auto rounded shadow h-100">
+    <table class="table table-fixed table-background">
+      <thead>
+      <tr class="font-weight-bold d-flex flex-row">
+        <th scope="col" class='d-flex w-10'>Id</th>
+        <th scope="col" class="d-flex w-15">Participant</th>
+        <th scope="col" class="d-flex w-25">Location</th>
+        <th scope="col" class="d-flex w-25">Weather</th>
+        <th scope="col" class="d-flex w-25">Timestamp</th>
+        <th scope="col" class="d-flex w-10">&nbsp;</th>
+      </tr>
 
-    <div id="social">
-      <ul>
-        <li id="social-twitter"><a href="#">Twitter</a></li>
-        <li id="social-facebook"><a href="#">Facebook</a></li>
-        <li id="social-instagram"><a href="#">Instagram</a></li>
-      </ul>
+      </thead>
+      <tbody>
+      {{#each observations}}
+      <tr class="font-weight-light d-flex flex-row">
+        <td class="d-flex w-10">{{../prefix}} {{id}}</td>
+        <td class="d-flex w-15"> {{../prefix}} {{participant}}</td>
+        <td class="d-flex w-25"><a href="/#!/observations/{{id}}">{{location}} {{weather}}</a></td>
+        <td class="d-flex w-25">{{../prefix}} {{weather}}</td>
+        <td class="d-flex w-25">{{../prefix}} {{timestamp}}</td>
+        <td class="d-flex w-10"><span class="text text-primary"><a href="/#!/observations/{{id}}"> view</a></span>
+        </th>
+      </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+</script>
+<!--Observation view used to render recent observations ends-->
+
+<!-- Observation list view main container for listing all observations-->
+<script id="observations-list-view-container" type="text/x-handlebars-template">
+  <div class="h-100 w-75 m-auto">
+    <h2 class="color-primary mt-2">
+      Observations
+    </h2>
+    <div class="h-90">
+      #observations
     </div>
+  </div>
+</script>
+<!-- Observation list view main container for listing all observations ends-->
 
-    <ul class="footer-tos">
-      <li><a href="#">Terms</a></li>
-      <li><a href="#">Privacy</a></li>
-      <li><a href="#">Cookies</a></li>
-    </ul>
-    
-    <p id="copyright">All content and images subject to copyright &copy; COMP2110 Citizen Science 2020.</p>
-  </footer>
+<!--User List view container for listing all users-->
+<script id="user-list-view-container" type="text/x-handlebars-template">
+  <div class="h-100 w-75 m-auto">
+    <h2 class="color-primary mt-2">
+      User Leader Board
+    </h2>
+    <div class="h-90">
+      #users
+    </div>
+  </div>
+</script>
+<!--User List view container for listing all ends-->
+
+<!--Leader board container view renders a list of users-->
+<script id="leader-board-view-container" type="text/x-handlebars-template">
+  <div class="h-90 w-100 d-flex flex-column podium p-2 overflow-y-scroll">
+    {{#each users}}
+    <div class="h-20 d-flex flew-row podium-element">
+      <div class="podium-count d-flex justify-content align-self-center">
+        <div class="m-auto">{{inc @index}}</div>
+      </div>
+      <div class="justify-content align-self-center my-auto flex-fill">
+        <img class="ml-2" src="{{avatar}}"/>
+      </div>
+      <div class="justify-content align-self-center my-auto flex-fill">
+        <span class="font-weight-light">
+          <a href='/#!/users/{{../prefix}}{{id}}'>{{firstName}} {{last_name}}</a>
+        </span>
+      </div>
+      <div class="justify-content align-self-center my-auto flex-fill">
+        <span class="font-weight-light">Observations: {{observations}}</span>
+      </div>
+      <div class="justify-content align-self-center my-auto flex-fill">
+        <a class="btn btn-link" href='/#!/users/{{../prefix}}{{id}}'>view</a>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</script>
+<!--Leader board container view renders a list of users ends-->
+
+<!-- User details view renders the details and observations of a user-->
+<script id="user-detail-view-container" type="text/x-handlebars-template">
+  <div id="user-detail-container" class="h-100 w-75 mx-auto d-flex flex-column">
+    <div class="h-20 d-flex flex-row user-details p-3">
+      {{#with user}}
+      <div class="w-20">
+        <img class="ml-2 w-auto" src="{{avatar}}"/>
+      </div>
+      <div class="d-flex h-100 my-auto">
+        <div class="d-flex flex-column">
+          <div><h2 class="color-primary">First Name: <span class="color-secondary font-weight-light">{{first_name}}</span></h2></div>
+          <div><h2 class="color-primary">Last Name: <span class="color-secondary font-weight-light">{{last_name}}</span></h2></div>
+          <!--Need to make the tests pass hence adding the next line-->
+          <div><h2 class="color-primary">Full Name: <span class="color-secondary font-weight-light">{{first_name}} {{last_name}}</span></h2></div>
+        </div>
+      </div>
+      {{/with}}
+    </div>
+    <div>
+      <h2 class="color-primary">Observations</h2>
+    </div>
+    <div class="h-65">
+      #recent-obs
+    </div>
+  </div>
+</script>
+<!-- User details view renders the details and observations of a user ends-->
 
 
-  <!-- Templates -->
+<!-- Observation details view renders the complete details of an observation-->
+<script id="observation-details-view-container" type="text/x-handlebars-template">
+  <div id="observation-details" class="h-100 w-75 mx-auto d-flex flex-column">
+    <div class="h-80 my-auto dark-background p-3">
+      <h2 class="color-primary">Observation Details</h2>
+      <div class="flex-grow d-flex flex-row h-100">
+        {{#with observation}}
+        <div class="h-100 w-50 d-flex flex-column">
+          <div class="d-flex flex-row flex-fill">
+            <div>
+              <span class="color-primary font-weight-bold">ID:</span>
+            </div>
+            <div>
+              <span class="color-white font-weight-light ml-2">{{id}}</span>
+            </div>
+          </div>
+          <div class="d-flex flex-row flex-fill">
+            <div>
+              <span class="color-primary font-weight-bold">Participant:</span>
+            </div>
+            <div>
+              <span class="color-white font-weight-light ml-2">{{participant}}</span>
+            </div>
+          </div>
+          <div class="d-flex flex-row flex-fill">
+            <div>
+              <span class="color-primary font-weight-bold">Time:</span>
+            </div>
+            <div>
+              <span class="color-white font-weight-light ml-2">{{timestamp}}</span>
+            </div>
+          </div>
+          <div class="d-flex flex-row flex-fill">
+            <div>
+              <span class="color-primary font-weight-bold">Weather:</span>
+            </div>
+            <div>
+              <span class="color-white font-weight-light ml-2">{{weather}}</span>
+            </div>
+          </div>
+          <div class="d-flex flex-row flex-fill">
+            <div>
+              <span class="color-primary font-weight-bold">Wind:</span>
+            </div>
+            <div>
+              <span class="color-white font-weight-light ml-2">{{wind}}</span>
+            </div>
+          </div>
+          <div class="d-flex flex-row flex-fill">
+            <div>
+              <span class="color-primary font-weight-bold">Location:</span>
+            </div>
+            <div>
+              <span class="color-white font-weight-light ml-2">{{location}}</span>
+            </div>
+          </div>
 
-  </body>
+        </div>
+
+        <div class="h-100 w-50 d-flex flex-column">
+
+          <div class="h-100 w-50 d-flex flex-column">
+            <div class="d-flex flex-row flex-fill">
+              <div>
+                <span class="color-primary font-weight-bold">Height:</span>
+              </div>
+              <div>
+                <span class="color-white font-weight-light ml-2">{{height}}</span>
+              </div>
+            </div>
+            <div class="d-flex flex-row flex-fill">
+              <div>
+                <span class="color-primary font-weight-bold">Girth:</span>
+              </div>
+              <div>
+                <span class="color-white font-weight-light ml-2">{{girth}}</span>
+              </div>
+            </div>
+            <div class="d-flex flex-row flex-fill">
+              <div>
+                <span class="color-primary font-weight-bold">Leaf Size:</span>
+              </div>
+              <div>
+                <span class="color-white font-weight-light ml-2">{{leaf_size}}</span>
+              </div>
+            </div>
+            <div class="d-flex flex-row flex-fill">
+              <div>
+                <span class="color-primary font-weight-bold">Leaf Shape:</span>
+              </div>
+              <div>
+                <span class="color-white font-weight-light ml-2">{{leaf_shape}}</span>
+              </div>
+            </div>
+            <div class="d-flex flex-row flex-fill">
+              <div>
+                <span class="color-primary font-weight-bold">Bark Color:</span>
+              </div>
+              <div>
+                <span class="color-white font-weight-light ml-2">{{bark_colour}}</span>
+              </div>
+            </div>
+            <div class="d-flex flex-row flex-fill">
+              <div>
+                <span class="color-primary font-weight-bold">Bark Texture:</span>
+              </div>
+              <div>
+                <span class="color-white font-weight-light ml-2">{{bark_texture}}</span>
+              </div>
+            </div>
+
+          </div>
+          {{/with}}
+        </div>
+      </div>
+    </div>
+  </div>
+</script>
+<!-- Observation details view renders the complete details of an observation ends-->
+
+
+<!--Observation form view container renders the form for recording a new observation-->
+<script id="observation-form-view-container" type="text/x-handlebars-template">
+  <div id="observation-form-view" class="h-100 w-75 mx-auto d-flex flex-column">
+    <div class="h-90 w-100 table-background p-4 my-auto">
+      <h2>Record an Observation</h2>
+      <div id="formErrors" class="h-10 row">
+
+      </div>
+      <form id="observation-details-form" class="w-100 d-flex flex-column h-90">
+        <div class="d-flex flex-row h-90 w-100">
+          <div class="h-100 w-45">
+            <div class="form-group d-none">
+              <label for="participant">Temperature</label>
+              <input type="number" class="form-control" name="participant" id="participant" value="0">
+            </div>
+            <div class="form-group">
+              <label for="temperature">Temperature</label>
+              <input type="number" class="form-control" name="temperature" id="temperature">
+            </div>
+            <div class="form-group">
+              <label for="weather">Weather</label>
+              <select class="form-control" id="weather" name="weather">
+                <option>fine</option>
+                <option>raining</option>
+                <option>sunny</option>
+                <option>stormy</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="wind">Wind</label>
+              <select class="form-control" id="wind" name="wind">
+                <option>none</option>
+                <option>light</option>
+                <option>medium</option>
+                <option>strong</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="location">Location</label>
+              <input type="text" class="form-control" id="location" placeholder="spring field" name="location">
+            </div>
+            <div class="form-group">
+              <label for="height">Height</label>
+              <input type="number" class="form-control" id="height" name="height">
+            </div>
+          </div>
+          <div class="h-100 w-45 ml-auto">
+            <div class="form-group">
+              <label for="girth">Girth</label>
+              <input type="number" class="form-control" id="girth" placeholder="10" name="girth">
+            </div>
+            <div class="form-group">
+              <label for="leafSize">Leaf Size</label>
+              <select class="form-control" id="leafSize" name="leaf_size">
+                <option>small</option>
+                <option>medium</option>
+                <option>large</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="leafShape">Leaf Shape</label>
+              <select class="form-control" id="leafShape" name="leaf_shape">
+                <option>rounded</option>
+                <option>pointy</option>
+                <option>divided</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="barkColour">Bark Colour</label>
+              <select class="form-control" id="barkColour" name="bark_colour">
+                <option>red</option>
+                <option>silver</option>
+                <option>brown</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="barkTexture">Bark Texture</label>
+              <select class="form-control" id="barkTexture" name="bark_texture">
+                <option>smooth</option>
+                <option>peeling</option>
+                <option>crinkles</option>
+                <option>furry</option>
+                <option>spotty</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="w-100">
+          <button class="mx-auto w-15 btn btn-primary" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</script>
+<!--Observation form view container renders the form for recording a new ends-->
+
 </html>
+
+<!-- Icons made by <a href="https://www.flaticon.com/authors/eucalyp" title="Eucalyp">Eucalyp</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> -->
+<!-- Photo by Dan Otis on Unsplash -->
+<!-- Photo by Peter Fogden on Unsplash -->
+<!-- Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> -->
+<!-- Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a> -->

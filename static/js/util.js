@@ -28,9 +28,10 @@ function split_hash(hash) {
 // https://flaviocopes.com/how-to-sort-array-by-date-javascript/
 // @param array: array of objects with 'timestamp' key
 // @returns array of objects
-function sortArrayDescending(array) {
+function sortArrayDescending(array, key) {
+    console.log('stopping')
     return array.sort((a, b) => {
-        return (new Date(b.timestamp) - new Date(a.timestamp))
+        return (new Date(b[key]) - new Date(a[key]))
     })
 }
 // creates an HTTP GET request and formats to response to a JSON object.
